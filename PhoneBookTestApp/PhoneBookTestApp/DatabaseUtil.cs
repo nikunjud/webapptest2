@@ -5,10 +5,12 @@ namespace PhoneBookTestApp
 {
     public class DatabaseUtil
     {
+        /// <summary>
+        /// Create Phone book Table In Database
+        /// </summary>
         public static void initializeDatabase()
         {
-            var dbConnection = new SQLiteConnection("Data Source= MyDatabase.sqlite;Version=3;");
-            dbConnection.Open();
+            var dbConnection = GetConnection();
 
             try
             {
@@ -17,19 +19,6 @@ namespace PhoneBookTestApp
                         "create table PHONEBOOK (NAME varchar(255), PHONENUMBER varchar(255), ADDRESS varchar(255))",
                         dbConnection);
                 command.ExecuteNonQuery();
-
-                command =
-                    new SQLiteCommand(
-                        "INSERT INTO PHONEBOOK (NAME, PHONENUMBER, ADDRESS) VALUES('Chris Johnson','(321) 231-7876', '452 Freeman Drive, Algonac, MI')",
-                        dbConnection);
-                command.ExecuteNonQuery();
-
-                command =
-                    new SQLiteCommand(
-                        "INSERT INTO PHONEBOOK (NAME, PHONENUMBER, ADDRESS) VALUES('Dave Williams','(231) 502-1236', '285 Huron St, Port Austin, MI')",
-                        dbConnection);
-                command.ExecuteNonQuery();
-
             }
             catch (Exception)
             {
@@ -41,18 +30,12 @@ namespace PhoneBookTestApp
             }
         }
 
-        public static SQLiteConnection GetConnection()
-        {
-            var dbConnection = new SQLiteConnection("Data Source= MyDatabase.sqlite;Version=3;");
-            dbConnection.Open();
-
-            return dbConnection;
-        }
-
+        /// <summary>
+        /// Delete Table Phone Book On Application Close
+        /// </summary>
         public static void CleanUp()
         {
-            var dbConnection = new SQLiteConnection("Data Source= MyDatabase.sqlite;Version=3;");
-            dbConnection.Open();
+            var dbConnection = GetConnection();
 
             try
             {
@@ -70,6 +53,18 @@ namespace PhoneBookTestApp
             {
                 dbConnection.Close();
             }
+        }
+
+        /// <summary>
+        /// Get Database Connection
+        /// </summary>
+        /// <returns>Database Connection Object</returns>
+        public static SQLiteConnection GetConnection()
+        {
+            var dbConnection = new SQLiteConnection("Data Source= MyDatabase.sqlite;Version=3;");
+            dbConnection.Open();
+
+            return dbConnection;
         }
     }
 }
